@@ -1,0 +1,177 @@
+<app-breadcrumb
+  [title]="'Settings'"
+  [items]="['Dashboard']"
+  [active_item]="'Settings'"
+  icon="settings"
+></app-breadcrumb>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <h6>Change Password</h6>
+    </div>
+    <div class="col-sm-12">
+      <form [formGroup]="passwordForm" class="theme-form">
+        <div class="form-group">
+          <label class="col-form-label">Old Password</label>
+          <div class="input-group">
+            <input
+              class="form-control"
+              type="password"
+              required=""
+              placeholder="Old Password"
+              formControlName="old_password"
+              id="old_password"
+            />
+            <div class="input-group-append">
+              <span
+                class="input-group-text"
+                (click)="togglePassword('old_password')"
+                [class.active]="showPassword['old_password']"
+              >
+                <i class="far" [ngClass]="{'fa-eye': !showPassword['old_password'], 'fa-eye-slash': showPassword['old_password']}"></i>
+              </span>
+            </div>
+          </div>
+          <div
+            *ngIf="
+              passwordForm.controls.old_password.invalid &&
+              (passwordForm.controls.old_password.dirty ||
+                passwordForm.controls.old_password.touched)
+            "
+          >
+            <small class="text-danger">Old Password is required</small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-form-label">New Password</label>
+          <div class="input-group">
+            <input
+              class="form-control"
+              type="password"
+              required=""
+              placeholder="New Password"
+              formControlName="new_password"
+              id="new_password"
+            />
+            <div class="input-group-append">
+              <span
+                class="input-group-text"
+                (click)="togglePassword('new_password')"
+                [class.active]="showPassword['new_password']"
+              >
+                <i class="far" [ngClass]="{'fa-eye': !showPassword['new_password'], 'fa-eye-slash': showPassword['new_password']}"></i>
+              </span>
+            </div>
+          </div>
+          <div
+            *ngIf="
+              passwordForm.controls.new_password.invalid &&
+              (passwordForm.controls.new_password.dirty ||
+                passwordForm.controls.new_password.touched)
+            "
+          >
+            <small class="text-danger">New Password is required</small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-form-label">Confirm Password</label>
+          <div class="input-group">
+            <input
+              class="form-control"
+              type="password"
+              required=""
+              placeholder="Confirm Password"
+              formControlName="confirm_password"
+              id="confirm_password"
+            />
+            <div class="input-group-append">
+              <span
+                class="input-group-text"
+                (click)="togglePassword('confirm_password')"
+                [class.active]="showPassword['confirm_password']"
+              >
+                <i class="far" [ngClass]="{'fa-eye': !showPassword['confirm_password'], 'fa-eye-slash': showPassword['confirm_password']}"></i>
+              </span>
+            </div>
+          </div>
+          <div
+            *ngIf="
+              passwordForm.controls.confirm_password.invalid &&
+              (passwordForm.controls.confirm_password.dirty ||
+                passwordForm.controls.confirm_password.touched)
+            "
+          >
+            <small class="text-danger">Confirm Password is required</small>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-12 mt-3 btnPadding">
+      <button
+        class="btn btn-primary btn-block"
+        [disabled]="!passwordForm.valid"
+        (click)="changePassword()"
+        type="button"
+      >
+        <span>Change Password</span>
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <h6>URL Settings</h6>
+    </div>
+    <div class="col-sm-12">
+      <form [formGroup]="settingsForm" class="theme-form">
+        <div class="form-group">
+          <label class="col-form-label">IOS App URL</label>
+          <input
+            class="form-control"
+            type="text"
+            required=""
+            placeholder="Url here.."
+            formControlName="ios_url"
+          />
+          <div
+            *ngIf="
+              settingsForm.controls.ios_url.invalid &&
+              (settingsForm.controls.ios_url.dirty ||
+                settingsForm.controls.ios_url.touched)
+            "
+          >
+            <small class="text-danger">IOS URL is required</small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-form-label">Playsore App URL</label>
+          <input
+            class="form-control"
+            type="text"
+            required=""
+            placeholder="Url here.."
+            formControlName="play_url"
+          />
+          <div
+            *ngIf="
+              settingsForm.controls.play_url.invalid &&
+              (settingsForm.controls.play_url.dirty ||
+                settingsForm.controls.play_url.touched)
+            "
+          >
+            <small class="text-danger">Playstore URL is required</small>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-12 mt-3 btnPadding">
+      <button
+        class="btn btn-primary btn-block"
+        [disabled]="!settingsForm.valid"
+        (click)="save()"
+        type="button"
+      >
+        <span>Save</span>
+      </button>
+    </div>
+  </div>
+</div>

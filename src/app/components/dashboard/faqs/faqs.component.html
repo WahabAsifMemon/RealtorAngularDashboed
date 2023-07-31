@@ -1,0 +1,179 @@
+<app-breadcrumb
+  [title]="'Faqs'"
+  [items]="['Dashboard']"
+  [active_item]="'Faqs'"
+  icon="help-circle"
+></app-breadcrumb>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12 btnPadding">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5>All Faqs</h5>
+          <button class="btn btn-primary" (click)="open(addModal, 'add')">Add Faqs</button>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div
+              class="col-sm-6 d-flex justify-content-start align-items-center"
+            >
+              <div class="searchField mt-1 w-100">
+                <input
+                  type="text"
+                  [(ngModel)]="searchInput"
+                  placeholder="Search"
+                  class="w-100 white"
+                />
+                <i class="fa fa-search"></i>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="order-history table-responsive wishlist">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Id</th>
+                      <th scope="col">Title</th>
+                      <th scope="col">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container
+                      *ngIf="
+                        (faqs | filter : searchInput)?.length;
+                        else noData
+                      "
+                    >
+                      <tr
+                        *ngFor="
+                          let i = index;
+                          let item;
+                          of: faqs
+                            | filter : searchInput
+                            | paginate
+                              : {
+                                  itemsPerPage: 5,
+                                  currentPage: duePage,
+                                  totalItems: total
+                                }
+                        "
+                      >
+                        <th scope="row">{{ item?.id }}</th>
+                        <td>{{ item?.title}}</td>
+                        <td>{{ item?.description ? item?.description : "N/A" }}</td>
+                        <td>
+                          <div
+                            class="toggle d-flex align-items-center w-100 justify-content-center"
+                          >
+                            <input
+                              (change)="stateItem(item, $event)"
+                              class="checkBox"
+                              type="checkbox"
+                              [checked]="
+                                item?.status == '1' ? true : false
+                              "
+                              [id]="'user' + i"
+                            /><label [for]="'user' + i"></label>
+                          </div>
+                        </td>
+                        <td
+                          class="d-flex justify-content-center align-items-center"
+                        >
+                          <button
+                            class="btn btn-primary"
+                            (click)="userDetail(item?.id)"
+                          >
+                            <i class="fa fa-share mlicon"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noData>
+                      <tr *ngIf="faqs?.length">
+                        <td colspan="5" class="text-center white">
+                          No Matching Data Available
+                        </td>
+                      </tr>
+                    </ng-template>
+                    <tr *ngIf="!faqs?.length">
+                      <td class="text-center white" colspan="5">
+                        No data available
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div
+              class="col-sm-12 d-flex justify-content-end"
+              *ngIf="faqs?.length"
+            >
+              <pagination-controls (pageChange)="duePage = $event">
+              </pagination-controls>
+            </div>
+          </div>
+        </div>
+        <!-- Container-fluid Ends-->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Edit User -->
+<ng-container>
+    <ng-template #addModal let-modal>
+      <div class="modal-body checkoutModal completed">
+        <button
+          class="btn-close"
+          id="checkoutClose"
+          aria-label="Close"
+          (click)="proceed()"
+        ></button>
+        <h5 class="modal-title">{{state ? 'Edit Faq' : 'Add Faq'}}</h5>
+        <form [formGroup]="faqForm" class="form">
+            <div class="row mt-4">
+              <div class="col-lg-12 mt-3">
+                <label for="" class="text-light mb-3">Title</label>
+                <textarea
+                  formControlName="title"
+                  type="text"
+                  placeholder="Title"
+                  class="text-light w-100"
+                ></textarea>
+                <div
+                  *ngIf="
+                    faqForm.controls.title.invalid &&
+                    (faqForm.controls.title.dirty ||
+                      faqForm.controls.title.touched)
+                  "
+                >
+                  <small class="text-danger">Title is required</small>
+                </div>
+              </div>
+              <div class="col-lg-12 mt-3">
+                <label for="" class="text-light mb-3">Description</label>
+                <ckeditor [editor]="Editor" formControlName="description"></ckeditor>
+                <div
+                  *ngIf="
+                    faqForm.controls.description.invalid &&
+                    (faqForm.controls.description.dirty ||
+                      faqForm.controls.description.touched)
+                  "
+                >
+                  <small class="text-danger">Description is required</small>
+                </div>
+              </div>
+            </div>
+          </form>
+      </div>
+      <div class="modal-footer d-flex justify-content-start">
+        <button
+          class="btn add-btn"
+        >
+          Save
+        </button>
+        <button class="btn cancel-btn" aria-label="Close" (click)="proceed()">
+          Cancel
+        </button>
+      </div>
+    </ng-template>
+  </ng-container>

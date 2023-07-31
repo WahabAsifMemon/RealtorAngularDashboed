@@ -1,0 +1,138 @@
+<app-breadcrumb [title]="'Notifications'" [items]="['Dashboard']" [active_item]="'Notifications'" icon="bell"></app-breadcrumb>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <form [formGroup]="notificationForm" class="theme-form">
+        <div class="form-group">
+          <label class="col-form-label">Title</label>
+          <input class="form-control" type="text" required="" placeholder="Title here.." formControlName="title" />
+          <div *ngIf="
+                  notificationForm.controls.title.invalid &&
+                  (notificationForm.controls.title.dirty ||
+                    notificationForm.controls.title.touched)
+                ">
+            <small class="text-danger">Title is required</small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-form-label">Body</label>
+          <textarea class="form-control" type="text" required="" placeholder="Body here.."
+            formControlName="body"></textarea>
+          <div *ngIf="
+                    notificationForm.controls.body.invalid &&
+                    (notificationForm.controls.body.dirty ||
+                      notificationForm.controls.body.touched)
+                  ">
+            <small class="text-danger">Body is required</small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-form-label">Screen</label>
+          <textarea class="form-control" type="text" required="" placeholder="Screen Here.."
+            formControlName="screen_name"></textarea>
+          <div *ngIf="
+                    notificationForm.controls.body.invalid &&
+                    (notificationForm.controls.body.dirty ||
+                      notificationForm.controls.body.touched)
+                  ">
+            <small class="text-danger">Screen is required</small>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>All Users</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div
+              class="col-sm-6 d-flex justify-content-start align-items-center"
+            >
+              <div class="searchField mt-1 w-100">
+                <input
+                  type="text"
+                  [(ngModel)]="searchInput"
+                  placeholder="Search"
+                  class="w-100 white"
+                />
+                <i class="fa fa-search"></i>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="order-history table-responsive wishlist">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">
+                        <input type="checkbox" [checked]="isAllUsersSelected()" (change)="toggleSelectAll($event.target)" />
+                      </th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Email</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container
+                      *ngIf="
+                        (users | filter : searchInput)?.length;
+                        else noData
+                      "
+                    >
+                      <tr
+                        *ngFor="
+                          let i = index;
+                          let item;
+                          of: users
+                            | filter : searchInput
+                            | paginate
+                              : {
+                                  itemsPerPage: 5,
+                                  currentPage: duePage,
+                                  totalItems: total
+                                }
+                        "
+                      >
+                      <td>
+                        <input type="checkbox" [(ngModel)]="item.checked" (change)="toggleUserSelection(item)" />
+                      </td>
+                        <td>{{ item?.first_name ? item?.first_name : "N/A" }}</td>
+                        <td>{{ item?.email ? item?.email : "N/A" }}</td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noData>
+                      <tr *ngIf="users?.length">
+                        <td colspan="5" class="text-center white">
+                          No Matching Data Available
+                        </td>
+                      </tr>
+                    </ng-template>
+                    <tr *ngIf="!users?.length">
+                      <td class="text-center white" colspan="5">
+                        No data available
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div
+              class="col-sm-12 d-flex justify-content-end"
+              *ngIf="users?.length"
+            >
+              <pagination-controls (pageChange)="duePage = $event">
+              </pagination-controls>
+            </div>
+          </div>
+        </div>
+        <!-- Container-fluid Ends-->
+      </div>
+    </div>
+    <div class="col-sm-12 mt-3 btnPadding">
+      <button class="btn btn-primary btn-block" [disabled]="!notificationForm.valid" (click)="save()" type="button">
+        <span>Send</span>
+      </button>
+    </div>
+  </div>
+</div>

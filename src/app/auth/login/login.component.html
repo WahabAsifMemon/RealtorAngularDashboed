@@ -1,0 +1,57 @@
+<div class="container-fluid p-0">
+  <div class="row">
+    <div class="col-12">
+      <div class="login-card">
+        <div>
+          <div class="d-flex justify-content-center">
+              <app-img classes="img-fluid for-light" [styles]="{  'width': '200px', 'height': '100px', 'object-fit': 'contain' }" alt="looginpage" src="assets/1x/AppLogo.webp"></app-img>
+          </div>
+          <div class="login-main">
+            <form class="theme-form" [formGroup]="loginForm">
+              <h4>Sign in to account</h4>
+              <p>Enter your email & password to login</p>
+              <div class="form-group">
+                <label class="col-form-label">Email Address</label>
+                <input class="form-control" type="email" required="" placeholder="app@yourmail.com"
+                  formControlName="email" />
+                <div
+                  *ngIf="loginForm.controls?.['email']?.touched && loginForm.controls?.['email']?.errors?.['required']"
+                  class="text text-danger mb-3">
+                  Email is required
+                </div>
+                <div *ngIf="loginForm.controls?.['email']?.touched && loginForm.controls?.['email']?.errors?.['email']"
+                  class="text text-danger mb-3">
+                  Email is invalid
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-form-label">Password</label>
+                <input class="form-control" [type]="show ? 'text' : 'password'" formControlName="password" required=""
+                  placeholder="*********" />
+                <div *ngIf="
+                loginForm.controls.password.invalid &&
+                (loginForm.controls.password.dirty ||
+                  loginForm.controls.password.touched)
+              ">
+                  <small class="text-danger">Password is required</small>
+                </div>
+                <div class="show-hide" (click)="showPassword()" *ngIf="!show">
+                  <span class="show"></span>
+                </div>
+                <div class="show-hide" (click)="showPassword()" *ngIf="show">
+                  <span class="Hide"></span>
+                </div>
+              </div>
+              <div class="form-group mb-0">
+                <button class="btn btn-primary btn-block" [disabled]="!loginForm.valid" (click)="login()" type="button">
+                  <span>Login</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
