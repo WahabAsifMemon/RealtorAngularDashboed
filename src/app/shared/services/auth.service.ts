@@ -8,8 +8,5 @@ import { Subject } from 'rxjs';
 export class AuthService {
   constructor(private router: Router) {}
   public static signin: Subject<any> = new Subject<any>();
-  logout() {
-    // localStorage.clear();
-    // this.router.navigate(['/']);
-  }
+ 
 }

@@ -60,44 +60,24 @@
               </div>
             </div>
             <hr />
-            <!-- <div class="follow">
+            <div class="follow">
               <div class="row">
                 <div class="col-12 text-center border-right">
                   <div
                     class="follow-num"
-                    [CountTo]="historyLength"
+                    [CountTo]="appointmentLength"
                     [from]="0"
                     [duration]="1"
                   ></div>
-                  <h6 *ngIf="historyLength == 0">0</h6>
-                  <span>Total Searches</span>
+                  <h6 *ngIf="appointmentLength == 0">0</h6>
+                  <span>Total Appointments</span>
                 </div>
               </div>
-            </div> -->
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <!-- <div class="row btnPadding">
-    <div class="col-sm-12">
-      <div class="card">
-        <div class="card-header">
-          <h5>History Gallery</h5>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-sm-3 mt-3 mb-3" *ngFor="let item of history">
-              <div class="colStyle">
-                <app-img classes="img-fluid" [styles]="{ 'width': '100%', 'height': '100px', 'object-fit': 'contain' }" alt="looginpage" [src]="item?.img_url"></app-img>
-              </div>
-            </div>
-            <div class="col-12" *ngIf="history.length === 0">
-              <h6 class="text-center">No data found</h6>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
+ 
 </div>
