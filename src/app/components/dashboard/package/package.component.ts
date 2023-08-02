@@ -3,17 +3,18 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { tap } from 'rxjs';
 import { HttpService } from 'src/app/shared/services/http.service';
 
 @Component({
-  selector: 'app-faqs',
-  templateUrl: './faqs.component.html',
-  styleUrls: ['./faqs.component.scss']
+  selector: 'app-package',
+  templateUrl: './package.component.html',
+  styleUrls: ['./package.component.scss']
 })
-export class FaqsComponent {
+export class PackageComponent {
+  headerImageUrl = 'https://buybestthemes.com/mobile_app_api/realtor/storage/app/2023-08-02 11:44:00.png';
+
   public Editor:any = ClassicEditor;
-  public faqs: [] = [];
+  public package: any = [];
   public duePage!: any;
   public total!: any;
   public searchInput!: any;
@@ -62,16 +63,10 @@ export class FaqsComponent {
     this.state = false;
   }
   async loadData() {
-    await Promise.all([this.getFaqs()]);
+    await Promise.all([this.getpackage()]);
   }
 
   save(modal: boolean) {
-    if (!this.state) {
-      this.faqForm.patchValue({
-        ...this.faqForm.value,
-        position: this.faqs?.length + 1,
-      });
-    }
     this.http
       .post('faq-create', this.faqForm.value, true)
 
@@ -83,7 +78,7 @@ export class FaqsComponent {
           this.faqForm.reset();
         },
         complete: () => {
-          this.getFaqs();
+          this.getpackage();
           this.faqForm.removeControl('id');
           this.faqForm.removeControl('status');
           this.state = false;
@@ -93,11 +88,11 @@ export class FaqsComponent {
 
 
 
-  async getFaqs() {
+  async getpackage() {
     try {
-      const res: any = await this.http.get('get-faq', true).toPromise();
+      const res: any = await this.http.get('get-package', true).toPromise();
       console.log(res);
-      this.faqs = res?.faqs;
+      this.package = res?.package;
     } catch (error) {
       console.error('Error fetching users:', error);
     }
@@ -114,10 +109,10 @@ export class FaqsComponent {
   //   await this.save(true); // Pass true here to indicate modal is open
   // }
 
- // In the stateItem function of faqs.component.ts
+ // In the stateItem function of package.component.ts
 
  async stateItem(event: any, data: any) {
-  this.selectedFaq = this.faqs?.find((e: any) => e?.id == event.id);
+  this.selectedFaq = this.package?.find((e: any) => e?.id == event.id);
   if (this.selectedFaq) {
     const { id, title, description } = this.selectedFaq || {};
     this.faqForm.patchValue({
@@ -136,5 +131,4 @@ export class FaqsComponent {
   this.save(false);
 }
 
-
-} 
+}

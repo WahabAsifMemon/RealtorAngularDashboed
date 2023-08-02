@@ -1,6 +1,6 @@
 <app-breadcrumb
   [title]="'User'"
-  [items]="['Users']"
+  [items]="['appointment']"
   [active_item]="'User'"
   icon="user"
 ></app-breadcrumb>
@@ -70,14 +70,120 @@
                     [duration]="1"
                   ></div>
                   <h6 *ngIf="appointmentLength == 0">0</h6>
-                  <span>Total Appointments</span>
+                  <span>Total Appointment</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <div class="col-sm-12">
+        <!-- <app-breadcrumb
+      [title]="'Appointment'"
+      [items]="['Dashboard']"
+      [active_item]="'Appointment'"
+      icon="appointment"
+    ></app-breadcrumb> -->
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-12 btnPadding">
+            <div class="card">
+              <div class="card-header">
+                <h5>Appointment</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div
+                    class="col-sm-6 d-flex justify-content-start align-items-center"
+                  >
+                    <div class="searchField mt-1 w-100">
+                      <input
+                        type="text"
+                        [(ngModel)]="searchInput"
+                        placeholder="Search"
+                        class="w-100 white"
+                      />
+                      <i class="fa fa-search"></i>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="order-history table-responsive wishlist">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Time</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <ng-container
+                            *ngIf="
+                              (appointment | filter : searchInput)?.length;
+                              else noData
+                            "
+                          >
+                            <tr
+                              *ngFor="
+                                let i = index;
+                                let item;
+                                of: appointment
+                                  | filter : searchInput
+                                  | paginate
+                                    : {
+                                        itemsPerPage: 5,
+                                        currentPage: duePage,
+                                        totalItems: total
+                                      }
+                              "
+                            >
+                              <th scope="row">{{ item?.id }}</th>
+                              <td>{{ item?.name}}</td>
+                              <td>{{ item?.address ? item?.address : "N/A" }}</td>
+                              <td>{{ item?.type ? item?.type : "N/A" }}</td>
+                              <td>{{ item?.date | date}}</td>
+                              <td>{{ item?.time ? item?.time : "N/A" }}</td>
+
+            
+                            </tr>
+                          </ng-container>
+                          <ng-template #noData>
+                            <tr *ngIf="appointment?.length">
+                              <td colspan="8" class="text-center white">
+                                No Matching Data Available
+                              </td>
+                            </tr>
+                          </ng-template>
+                          <tr *ngIf="!appointment?.length">
+                            <td class="text-center white" colspan="8">
+                              No data available
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div
+                    class="col-sm-12 d-flex justify-content-end"
+                    *ngIf="appointment?.length"
+                  >
+                    <pagination-controls (pageChange)="duePage = $event">
+                    </pagination-controls>
+                  </div>
+                </div>
+              </div>
+              <!-- Container-fluid Ends-->
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
     </div>
   </div>
  
 </div>
+
+

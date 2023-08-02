@@ -35,6 +35,10 @@
                       <th scope="col">Id</th>
                       <th scope="col">Title</th>
                       <th scope="col">Description</th>
+                      <th scope="col">Status</th>
+
+                      <th scope="col">Action</th>
+
                     </tr>
                   </thead>
                   <tbody>
@@ -60,7 +64,7 @@
                       >
                         <th scope="row">{{ item?.id }}</th>
                         <td>{{ item?.title}}</td>
-                        <td>{{ item?.description ? item?.description : "N/A" }}</td>
+                        <td [innerHTML]="item?.description"></td>
                         <td>
                           <div
                             class="toggle d-flex align-items-center w-100 justify-content-center"
@@ -76,27 +80,29 @@
                             /><label [for]="'user' + i"></label>
                           </div>
                         </td>
-                        <td
-                          class="d-flex justify-content-center align-items-center"
-                        >
+                        <td class="d-flex justify-content-center align-items-center">
                           <button
-                            class="btn btn-primary"
-                            (click)="userDetail(item?.id)"
+                            class="actionbtn btn btn-primary"
+                            placement="top"
+                            ngbTooltip="Edit Faq"
+                            (click)="selectedFaq = item; open(addModal, 'edit')"
                           >
-                            <i class="fa fa-share mlicon"></i>
+                            <i class="fa fa-edit mlicon"></i>
                           </button>
                         </td>
+
+                        
                       </tr>
                     </ng-container>
                     <ng-template #noData>
                       <tr *ngIf="faqs?.length">
-                        <td colspan="5" class="text-center white">
+                        <td colspan="3" class="text-center white">
                           No Matching Data Available
                         </td>
                       </tr>
                     </ng-template>
                     <tr *ngIf="!faqs?.length">
-                      <td class="text-center white" colspan="5">
+                      <td class="text-center white" colspan="3">
                         No data available
                       </td>
                     </tr>
@@ -128,16 +134,17 @@
           aria-label="Close"
           (click)="proceed()"
         ></button>
-        <h5 class="modal-title">{{state ? 'Edit Faq' : 'Add Faq'}}</h5>
+        <h5 style="color: aliceblue;" class="modal-title">{{state ? 'Edit Faq' : 'Add Faq'}}</h5>
         <form [formGroup]="faqForm" class="form">
             <div class="row mt-4">
               <div class="col-lg-12 mt-3">
                 <label for="" class="text-light mb-3">Title</label>
                 <textarea
+                
                   formControlName="title"
                   type="text"
                   placeholder="Title"
-                  class="text-light w-100"
+                  class="text-dark w-100"
                 ></textarea>
                 <div
                   *ngIf="
@@ -167,13 +174,15 @@
       </div>
       <div class="modal-footer d-flex justify-content-start">
         <button
-          class="btn add-btn"
-        >
-          Save
-        </button>
-        <button class="btn cancel-btn" aria-label="Close" (click)="proceed()">
-          Cancel
-        </button>
+        class="btn add-btn"
+        [disabled]="faqForm.invalid"
+        (click)="save(true)"
+      >
+        Save
+      </button>
+      <button class="btn cancel-btn" aria-label="Close" (click)="proceed()">
+        Cancel
+      </button>
       </div>
     </ng-template>
   </ng-container>

@@ -15,6 +15,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { ImageModule } from 'src/app/image/image.module';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FaqsComponent } from './faqs/faqs.component';
+import { PackageComponent } from './package/package.component';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -24,6 +25,7 @@ import { FaqsComponent } from './faqs/faqs.component';
     NotificationComponent,
     SettingsComponent,
     FaqsComponent,
+    PackageComponent,
     ],
   imports: [
     CommonModule,

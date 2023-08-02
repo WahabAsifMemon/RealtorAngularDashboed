@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { HttpService } from 'src/app/shared/services/http.service';
+
 
 @Component({
   selector: 'app-user-detail',
@@ -9,9 +11,25 @@ import { HttpService } from 'src/app/shared/services/http.service';
 })
 export class UserDetailComponent {
   public user;
+  public appointment  : [] = [];
   public appointmentLength:number = 0;
+  public duePage!: any;
+  public total!: any;
+  public searchInput!: any;
 
-  constructor(private route: ActivatedRoute, private http:HttpService){}
+  // constructor(
+  //   private http: HttpService,
+  //   private router: Router,
+  //   private fb: FormBuilder
+  // ) {}
+  userForm: any = this.fb.group({
+    id: [null, Validators.required],
+    status: [null, Validators.required],
+  });
+
+
+
+  constructor(private route: ActivatedRoute, private http:HttpService,  private fb: FormBuilder){}
   ngOnInit() {
     this.route.params.subscribe(params => {
       let userId = params['id'];
@@ -33,10 +51,15 @@ export class UserDetailComponent {
 
     try {
       const res: any = await this.http.get(`appointment/${id}`, true).toPromise();
-      this.user = res?.appointment;
+      this.appointment = res?.appointments;
+      this.appointmentLength = res?.appointments?.length;
       console.log(res);
     } catch (error) {
       console.error('Error fetching users:', error);
     }
   }
+
+
+
+  
 }

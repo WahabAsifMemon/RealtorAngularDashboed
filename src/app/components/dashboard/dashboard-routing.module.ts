@@ -8,6 +8,9 @@ import { AboutUsComponent } from './about-us/about-us.component';
 import { SettingsComponent } from './settings/settings.component';
 import { NotificationComponent } from './notification/notification.component';
 import { FaqsComponent } from './faqs/faqs.component';
+import { PackageComponent } from './package/package.component';
+
+
 
 const routes: Routes = [
   {
@@ -41,6 +44,12 @@ const routes: Routes = [
         path: 'faqs',
         component: FaqsComponent,
       },
+
+      {
+        path: 'package',
+        component: PackageComponent,
+      },
+
       {
         path: '**',
         redirectTo: 'notifications',

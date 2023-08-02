@@ -1,0 +1,33 @@
+<app-breadcrumb
+  [title]="'Faqs'"
+  [items]="['Dashboard']"
+  [active_item]="'Faqs'"
+  icon="help-circle"
+></app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-xl-4" *ngFor="let item of package">
+            <div class="card">
+                <div [ngStyle]="{'background-image': 'url(' + item.package_img + ')'}"  class="card-header b-l-primary" >
+                    <h5>{{item?.title}}</h5>
+                </div>
+                <div class="card-body">
+                    <h5>Type: {{item?.type}}</h5>
+                    <h5>Price: {{item?.price}}</h5>
+
+                    <p>
+                        {{item?.description}}
+                    </p>
+                </div>
+            </div>
+
+            <!-- <div class="card">
+                <img src="https://img.freepik.com/free-photo/view-brightly-colored-frog-nature_23-2150453188.jpg?t=st=1690923356~exp=1690926956~hmac=97ad5295389b8fb199eade72f8202da8718c82478a7dc908319337ecf087da32&w=740" alt="">
+                <div class="description">
+                  <h1>{{item?.title}}</h1>
+                  <p> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ex hic corporis animi harum? Nisi quis ipsum laborum a animi perspiciatis assumenda quae deserunt porro, soluta voluptatum molestiae. Eveniet, aliquam! Mollitia? </p>
+                </div>
+                </div> -->
+        </div>
+    </div>
+</div>
