@@ -1,33 +1,128 @@
 <app-breadcrumb
-  [title]="'Faqs'"
+  [title]="'Package'"
   [items]="['Dashboard']"
-  [active_item]="'Faqs'"
+  [active_item]="'Package'"
   icon="help-circle"
 ></app-breadcrumb>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-12 col-xl-4" *ngFor="let item of package">
-            <div class="card">
-                <div [ngStyle]="{'background-image': 'url(' + item.package_img + ')'}"  class="card-header b-l-primary" >
-                    <h5>{{item?.title}}</h5>
-                </div>
-                <div class="card-body">
-                    <h5>Type: {{item?.type}}</h5>
-                    <h5>Price: {{item?.price}}</h5>
-
-                    <p>
-                        {{item?.description}}
-                    </p>
-                </div>
-            </div>
-
-            <!-- <div class="card">
-                <img src="https://img.freepik.com/free-photo/view-brightly-colored-frog-nature_23-2150453188.jpg?t=st=1690923356~exp=1690926956~hmac=97ad5295389b8fb199eade72f8202da8718c82478a7dc908319337ecf087da32&w=740" alt="">
-                <div class="description">
-                  <h1>{{item?.title}}</h1>
-                  <p> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ex hic corporis animi harum? Nisi quis ipsum laborum a animi perspiciatis assumenda quae deserunt porro, soluta voluptatum molestiae. Eveniet, aliquam! Mollitia? </p>
-                </div>
-                </div> -->
+  <div class="row">
+    <div class="col-sm-12 col-xl-4" *ngFor="let item of package">
+      <div class="card">
+        <div style="background: url('{{ item?.package_img }}');" class="card-header b-l-primary no-repeat">
+          <h5>{{ item?.title }}</h5>
+          <i class="fas fa-trash delete-icon"  (change)="stateItem(item, $event)"></i>
         </div>
+        <div class="card-body d-flex justify-content-center flex-column align-items-center">
+          <p>{{ item?.description }}</p>
+          <h4>{{ item?.price }}</h4>
+          <button (click)="selectedPackage = item; open(addModal, 'edit')" class="btn btn-primary mt-3">Add</button>
+        </div>
+      </div>
+      
     </div>
+  </div>
 </div>
+
+<ng-container>
+    <ng-template #addModal let-modal>
+      <div class="modal-body checkoutModal completed">
+        <button
+          class="btn-close"
+          id="checkoutClose"
+          aria-label="Close"
+          (click)="proceed()"
+        ></button>
+        <h5 style="color: aliceblue;" class="modal-title">{{state ? 'Edit Package' : 'Add Package'}}</h5>
+        <form [formGroup]="packageForm" class="form">
+            <div class="row mt-4">
+              <div class="col-lg-12 mt-3">
+                <label for="" class="text-light mb-3">Title</label>
+                <textarea
+                
+                  formControlName="title"
+                  type="text"
+                  placeholder="Title"
+                  class="text-dark w-100"
+                ></textarea>
+                <div
+                  *ngIf="
+                    packageForm.controls.title.invalid &&
+                    (packageForm.controls.title.dirty ||
+                      packageForm.controls.title.touched)
+                  "
+                >
+                  <small class="text-danger">Title is required</small>
+                </div>
+              </div>
+
+              <div class="col-lg-12 mt-3">
+                <label for="" class="text-light mb-3">Price</label>
+                <textarea
+                
+                  formControlName="price"
+                  type="text"
+                  placeholder="Price"
+                  class="text-dark w-100"
+                ></textarea>
+                <div
+                  *ngIf="
+                    packageForm.controls.price.invalid &&
+                    (packageForm.controls.price.dirty ||
+                      packageForm.controls.price.touched)
+                  "
+                >
+                  <small class="text-danger">Price is required</small>
+                </div>
+              </div>
+
+              <div class="col-lg-12 mt-3">
+                <label for="" class="text-light mb-3">Type</label>
+                <textarea
+                
+                  formControlName="type"
+                  type="text"
+                  placeholder="type"
+                  class="text-dark w-100"
+                ></textarea>
+                <div
+                  *ngIf="
+                    packageForm.controls.type.invalid &&
+                    (packageForm.controls.type.dirty ||
+                      packageForm.controls.type.touched)
+                  "
+                >
+                  <small class="text-danger">Type is required</small>
+                </div>
+              </div>
+
+              <div class="col-lg-12 mt-3">
+                <label for="" class="text-light mb-3">Description</label>
+                <ckeditor [editor]="Editor" formControlName="description"></ckeditor>
+                <div
+                  *ngIf="
+                    packageForm.controls.description.invalid &&
+                    (packageForm.controls.description.dirty ||
+                      packageForm.controls.description.touched)
+                  "
+                >
+                  <small class="text-danger">Description is required</small>
+                </div>
+              </div>
+            </div>
+          </form>
+      </div>
+      <div class="modal-footer d-flex justify-content-start">
+        <button
+        class="btn add-btn"
+        [disabled]="packageForm.invalid"
+        (click)="save(true)"
+      >
+        Save
+      </button>
+      <button class="btn cancel-btn" aria-label="Close" (click)="proceed()">
+        Cancel
+      </button>
+      </div>
+    </ng-template>
+  </ng-container>
+

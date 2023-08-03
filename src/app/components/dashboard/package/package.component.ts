@@ -11,19 +11,24 @@ import { HttpService } from 'src/app/shared/services/http.service';
   styleUrls: ['./package.component.scss']
 })
 export class PackageComponent {
-  headerImageUrl = 'https://buybestthemes.com/mobile_app_api/realtor/storage/app/2023-08-02 11:44:00.png';
 
   public Editor:any = ClassicEditor;
   public package: any = [];
   public duePage!: any;
   public total!: any;
   public searchInput!: any;
-  public selectedFaq: any;
+  public selectedPackage: any;
+  // public deleteItem: any;
+
   public modalReference: any;
   public state: boolean = false;
-  public faqForm: any = this.fb.group({
+  public packageForm: any = this.fb.group({
     title: [null, Validators.required],
     description: [null, Validators.required],
+    price: [null, Validators.required],
+    type: [null, Validators.required],
+
+
   });
   constructor(
     private http: HttpService,
@@ -31,10 +36,7 @@ export class PackageComponent {
     private fb: FormBuilder,
     private modalService: NgbModal,
   ) {}
-  userForm: any = this.fb.group({
-    id: [null, Validators.required],
-    status: [null, Validators.required],
-  });
+
   ngOnInit() {
     this.loadData();
   }
@@ -44,22 +46,12 @@ export class PackageComponent {
       backdrop: 'static',
       windowClass: 'checkoutModal',
     });
-    this.state = state == 'edit' ? true : false;
-    if (state == 'edit') {
-      const { id, title, description } = this.selectedFaq || {};
-      this.faqForm.addControl('id', new FormControl(id));
-      this.faqForm.patchValue({
-        ...this.faqForm.value,
-        title,
-        description,
-      });
-    }
   }
   proceed() {
     this.modalReference.close();
-    this.faqForm.reset();
-    this.faqForm.removeControl('id');
-    this.faqForm.removeControl('status');
+    this.packageForm.reset();
+    this.packageForm.removeControl('id');
+    this.packageForm.removeControl('status');
     this.state = false;
   }
   async loadData() {
@@ -68,23 +60,25 @@ export class PackageComponent {
 
   save(modal: boolean) {
     this.http
-      .post('faq-create', this.faqForm.value, true)
+      .post('package-create', this.packageForm.value, true)
 
       .subscribe({
         next: () => {
           if (modal) {
             this.proceed();
           }
-          this.faqForm.reset();
+          this.packageForm.reset();
         },
         complete: () => {
           this.getpackage();
-          this.faqForm.removeControl('id');
-          this.faqForm.removeControl('status');
+          this.packageForm.removeControl('id');
+          this.packageForm.removeControl('status');
           this.state = false;
         },
       });
   }
+
+  
 
 
 
@@ -102,7 +96,7 @@ export class PackageComponent {
   // }
   // async stateItem(event: any, data: any) {
   //   const { id } = event || {};
-  //   await this.faqForm.patchValue({
+  //   await this.packageForm.patchValue({
   //     id: id,
   //     status: data.target.checked ? 1 : 0,
   //   });
@@ -112,23 +106,13 @@ export class PackageComponent {
  // In the stateItem function of package.component.ts
 
  async stateItem(event: any, data: any) {
-  this.selectedFaq = this.package?.find((e: any) => e?.id == event.id);
-  if (this.selectedFaq) {
-    const { id, title, description } = this.selectedFaq || {};
-    this.faqForm.patchValue({
-      ...this.faqForm.value,
-      title,
-      description,
-    });
-    this.faqForm.addControl('id', new FormControl(id));
-    this.faqForm.addControl(
-      'status',
-      new FormControl(data.target.checked ? 1 : 0)
-    );
-    console.log(this.faqForm.value);
-      
-  }
-  this.save(false);
+  const { id } = event || {};
+  await this.packageForm.patchValue({
+    id: id,
+    status: data.target.checked ? 1 : 0,
+  });
+  await this.save(false)
 }
+
 
 }
