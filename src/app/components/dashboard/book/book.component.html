@@ -1,0 +1,196 @@
+<app-breadcrumb
+  [title]="'Books'"
+  [items]="['Dashboard']"
+  [active_item]="'Books'"
+  icon="book"
+></app-breadcrumb>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12 btnPadding">
+      <div class="card">
+        <div
+          class="card-header d-flex justify-content-between align-items-center"
+        >
+          <h5>All Books</h5>
+          <button class="btn btn-primary" (click)="open(addModal, 'add')">
+            Add Book
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div
+              class="col-sm-6 d-flex justify-content-start align-items-center"
+            >
+              <div class="searchField mt-1 w-100">
+                <input
+                  type="text"
+                  [(ngModel)]="searchInput"
+                  placeholder="Search"
+                  class="w-100 white"
+                />
+                <i class="fa fa-search"></i>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="order-history table-responsive wishlist">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Id</th>
+                      <th scope="col">Title</th>
+                      <th scope="col">Description</th>
+                      <th scope="col">Book Image</th>
+                      <th scope="col">Type</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container
+                      *ngIf="
+                        (books | filter : searchInput)?.length;
+                        else noData
+                      "
+                    >
+                      <tr
+                        *ngFor="
+                          let i = index;
+                          let item;
+                          of: books
+                            | filter : searchInput
+                            | paginate
+                              : {
+                                  itemsPerPage: 5,
+                                  currentPage: duePage,
+                                  totalItems: total
+                                }
+                        "
+                      >
+                        <th scope="row">{{ item?.id }}</th>
+                        <td>{{ item?.title }}</td>
+                        <td [innerHTML]="item?.description"></td>
+                        <td>
+                          <div
+                            class="toggle d-flex align-items-center w-100 justify-content-center"
+                          >
+                            <input
+                              (change)="stateItem(item, $event)"
+                              class="checkBox"
+                              type="checkbox"
+                              [checked]="item?.status == '1' ? true : false"
+                              [id]="'user' + i"
+                            /><label [for]="'user' + i"></label>
+                          </div>
+                        </td>
+                        <td
+                          class="d-flex justify-content-center align-items-center"
+                        >
+                          <button
+                            class="actionbtn btn btn-primary"
+                            placement="top"
+                            ngbTooltip="Edit Book"
+                            (click)="
+                              selectedBook = item; open(addModal, 'edit')
+                            "
+                          >
+                            <i class="fa fa-edit mlicon"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noData>
+                      <tr *ngIf="books?.length">
+                        <td colspan="8" class="text-center white">
+                          No Matching Data Available
+                        </td>
+                      </tr>
+                    </ng-template>
+                    <tr *ngIf="!books?.length">
+                      <td class="text-center white" colspan="8">
+                        No data available
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div
+              class="col-sm-12 d-flex justify-content-end"
+              *ngIf="books?.length"
+            >
+              <pagination-controls (pageChange)="duePage = $event">
+              </pagination-controls>
+            </div>
+          </div>
+        </div>
+        <!-- Container-fluid Ends-->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Edit User -->
+<ng-container>
+  <ng-template #addModal let-modal>
+    <div class="modal-body checkoutModal completed">
+      <button
+        class="btn-close"
+        id="checkoutClose"
+        aria-label="Close"
+        (click)="proceed()"
+      ></button>
+      <h5 style="color: aliceblue" class="modal-title">
+        {{ state ? "Edit Book" : "Add Book" }}
+      </h5>
+      <form [formGroup]="bookForm" class="form">
+        <div class="row mt-4">
+          <div class="col-lg-12 mt-3">
+            <label for="" class="text-light mb-3">Title</label>
+            <textarea
+              formControlName="title"
+              type="text"
+              placeholder="Title"
+              class="text-dark w-100"
+            ></textarea>
+            <div
+              *ngIf="
+                bookForm.controls.title.invalid &&
+                (bookForm.controls.title.dirty ||
+                  bookForm.controls.title.touched)
+              "
+            >
+              <small class="text-danger">Title is required</small>
+            </div>
+          </div>
+          <div class="col-lg-12 mt-3">
+            <label for="" class="text-light mb-3">Description</label>
+            <ckeditor
+              [editor]="Editor"
+              formControlName="description"
+            ></ckeditor>
+            <div
+              *ngIf="
+                bookForm.controls.description.invalid &&
+                (bookForm.controls.description.dirty ||
+                  bookForm.controls.description.touched)
+              "
+            >
+              <small class="text-danger">Description is required</small>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer d-flex justify-content-start">
+      <button
+        class="btn add-btn"
+        [disabled]="bookForm.invalid"
+        (click)="save(true)"
+      >
+        Save
+      </button>
+      <button class="btn cancel-btn" aria-label="Close" (click)="proceed()">
+        Cancel
+      </button>
+    </div>
+  </ng-template>
+</ng-container>

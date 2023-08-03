@@ -10,7 +10,7 @@
       <div class="card">
         <div style="background: url('{{ item?.package_img }}');" class="card-header b-l-primary no-repeat">
           <h5>{{ item?.title }}</h5>
-          <i class="fas fa-trash delete-icon"  (change)="stateItem(item, $event)"></i>
+          <i class="fas fa-trash delete-icon" (click)="stateItem(item)"></i>
         </div>
         <div class="card-body d-flex justify-content-center flex-column align-items-center">
           <p>{{ item?.description }}</p>

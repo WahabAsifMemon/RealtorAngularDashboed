@@ -16,6 +16,8 @@ import { ImageModule } from 'src/app/image/image.module';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FaqsComponent } from './faqs/faqs.component';
 import { PackageComponent } from './package/package.component';
+import { BookComponent } from './book/book.component';
+import { InspireVideoComponent } from './inspire-video/inspire-video.component';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -26,6 +28,8 @@ import { PackageComponent } from './package/package.component';
     SettingsComponent,
     FaqsComponent,
     PackageComponent,
+    BookComponent,
+    InspireVideoComponent,
     ],
   imports: [
     CommonModule,

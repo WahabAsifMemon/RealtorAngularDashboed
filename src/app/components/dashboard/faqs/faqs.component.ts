@@ -3,7 +3,9 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { tap } from 'rxjs';
+// import { tap } from 'rxjs';
+// import { tap } from 'rxjs/operators';
+
 import { HttpService } from 'src/app/shared/services/http.service';
 
 @Component({

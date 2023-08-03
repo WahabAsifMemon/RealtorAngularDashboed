@@ -9,6 +9,9 @@ import { SettingsComponent } from './settings/settings.component';
 import { NotificationComponent } from './notification/notification.component';
 import { FaqsComponent } from './faqs/faqs.component';
 import { PackageComponent } from './package/package.component';
+import { BookComponent } from './book/book.component';
+import { InspireVideoComponent } from './inspire-video/inspire-video.component';
+
 
 
 
@@ -48,6 +51,16 @@ const routes: Routes = [
       {
         path: 'package',
         component: PackageComponent,
+      },
+
+      {
+        path: 'book',
+        component: BookComponent,
+      },
+
+      {
+        path: 'inspire_video',
+        component: InspireVideoComponent,
       },
 
       {

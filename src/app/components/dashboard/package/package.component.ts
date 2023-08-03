@@ -78,10 +78,6 @@ export class PackageComponent {
       });
   }
 
-  
-
-
-
   async getpackage() {
     try {
       const res: any = await this.http.get('get-package', true).toPromise();
@@ -91,28 +87,23 @@ export class PackageComponent {
       console.error('Error fetching users:', error);
     }
   }
-  // async userDetail(id) {
-  //   this.router.navigateByUrl(`/users/user/${id}`); // Remove the colon from the parameter
-  // }
-  // async stateItem(event: any, data: any) {
-  //   const { id } = event || {};
-  //   await this.packageForm.patchValue({
-  //     id: id,
-  //     status: data.target.checked ? 1 : 0,
-  //   });
-  //   await this.save(true); // Pass true here to indicate modal is open
-  // }
 
- // In the stateItem function of package.component.ts
+  async deletePackage(packageId: any) {
+    try {
+      await this.http.post(`package-delete/${packageId}`, null, true).toPromise();
+      this.getpackage();
+    } catch (error) {
+      console.error('Error deleting package:', error);
+    }
+  }
 
- async stateItem(event: any, data: any) {
-  const { id } = event || {};
-  await this.packageForm.patchValue({
-    id: id,
-    status: data.target.checked ? 1 : 0,
-  });
-  await this.save(false)
-}
+  async stateItem(item: any) {
+    try {
+      await this.deletePackage(item.id);
+    } catch (error) {
+      console.error('Error deleting package:', error);
+    }
+  }
 
 
 }
