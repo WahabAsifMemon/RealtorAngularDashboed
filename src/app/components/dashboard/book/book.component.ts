@@ -100,7 +100,7 @@ export class BookComponent {
         const res: any = await this.http.get('get_book', true).toPromise();
         console.log(res);
         
-        this.books = res?.book;
+        this.books = res?.books;
       } catch (error) {
         console.error('Error fetching users:', error);
       }

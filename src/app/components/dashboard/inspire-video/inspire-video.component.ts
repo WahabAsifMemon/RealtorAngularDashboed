@@ -12,11 +12,13 @@ import { HttpService } from 'src/app/shared/services/http.service';
 })
 export class InspireVideoComponent {
   public Editor:any = ClassicEditor;
-  public videos: [] = [];
+  public videos: any = [];
   public duePage!: any;
   public total!: any;
   public searchInput!: any;
   public selectedVideo: any;
+  // public deleteItem: any;
+
   public modalReference: any;
   public state: boolean = false;
   public videoForm: any = this.fb.group({
@@ -31,10 +33,7 @@ export class InspireVideoComponent {
     private fb: FormBuilder,
     private modalService: NgbModal,
   ) {}
-  userForm: any = this.fb.group({
-    id: [null, Validators.required],
-    status: [null, Validators.required],
-  });
+
   ngOnInit() {
     this.loadData();
   }
@@ -44,18 +43,6 @@ export class InspireVideoComponent {
       backdrop: 'static',
       windowClass: 'checkoutModal',
     });
-    this.state = state == 'edit' ? true : false;
-    if (state == 'edit') {
-      const { id, caption, thumbnail , description , inspire_video} = this.selectedVideo || {};
-      this.videoForm.addControl('id', new FormControl(id));
-      this.videoForm.patchValue({
-        ...this.videoForm.value,
-        caption,
-        thumbnail,
-        description,
-        inspire_video,
-      });
-    }
   }
   proceed() {
     this.modalReference.close();
@@ -65,16 +52,10 @@ export class InspireVideoComponent {
     this.state = false;
   }
   async loadData() {
-    await Promise.all([this.getvideos()]);
+    await Promise.all([this.getvideo()]);
   }
 
   save(modal: boolean) {
-    if (!this.state) {
-      this.videoForm.patchValue({
-        ...this.videoForm.value,
-        position: this.videos?.length + 1,
-      });
-    }
     this.http
       .post('video-create', this.videoForm.value, true)
 
@@ -86,7 +67,7 @@ export class InspireVideoComponent {
           this.videoForm.reset();
         },
         complete: () => {
-          this.getvideos();
+          this.getvideo();
           this.videoForm.removeControl('id');
           this.videoForm.removeControl('status');
           this.state = false;
@@ -94,38 +75,33 @@ export class InspireVideoComponent {
       });
   }
 
-  async getvideos() {
-      try {
-        const res: any = await this.http.get('get-video', true).toPromise();
-        console.log(res);
-        
-        this.videos = res?.videos;
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      }
+  async getvideo() {
+    try {
+      const res: any = await this.http.get('get-video', true).toPromise();
+      console.log(res);
+      this.videos = res?.videos;
+    } catch (error) {
+      console.error('Error fetching users:', error);
     }
-
- async stateItem(event: any, data: any) {
-  this.selectedVideo = this.videos?.find((e: any) => e?.id == event.id);
-  if (this.selectedVideo) {
-    const {id, caption, thumbnail , description , inspire_video} = this.selectedVideo || {};
-    this.videoForm.patchValue({
-      ...this.videoForm.value,
-      caption,
-        thumbnail,
-        description,
-        inspire_video,
-    });
-    this.videoForm.addControl('id', new FormControl(id));
-    this.videoForm.addControl(
-      'status',
-      new FormControl(data.target.checked ? 1 : 0)
-    );
-    console.log(this.videoForm.value);
-      
   }
-  this.save(false);
-}
+
+  async deleteVideo(videoId: any) {
+    try {
+      await this.http.post(`video-delete/${videoId}`, null, true).toPromise();
+      this.getvideo();
+    } catch (error) {
+      console.error('Error deleting video:', error);
+    }
+  }
+
+  async stateItem(item: any) {
+    try {
+      await this.deleteVideo(item.id);
+    } catch (error) {
+      console.error('Error deleting video:', error);
+    }
+  }
+
 
 
 } 

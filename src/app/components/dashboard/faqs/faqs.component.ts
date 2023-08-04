@@ -3,8 +3,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-// import { tap } from 'rxjs';
-// import { tap } from 'rxjs/operators';
+import { tap } from 'rxjs';
 
 import { HttpService } from 'src/app/shared/services/http.service';
 
@@ -93,8 +92,6 @@ export class FaqsComponent {
       });
   }
 
-
-
   async getFaqs() {
     try {
       const res: any = await this.http.get('get-faq', true).toPromise();
@@ -104,19 +101,7 @@ export class FaqsComponent {
       console.error('Error fetching users:', error);
     }
   }
-  // async userDetail(id) {
-  //   this.router.navigateByUrl(`/users/user/${id}`); // Remove the colon from the parameter
-  // }
-  // async stateItem(event: any, data: any) {
-  //   const { id } = event || {};
-  //   await this.faqForm.patchValue({
-  //     id: id,
-  //     status: data.target.checked ? 1 : 0,
-  //   });
-  //   await this.save(true); // Pass true here to indicate modal is open
-  // }
 
- // In the stateItem function of faqs.component.ts
 
  async stateItem(event: any, data: any) {
   this.selectedFaq = this.faqs?.find((e: any) => e?.id == event.id);
