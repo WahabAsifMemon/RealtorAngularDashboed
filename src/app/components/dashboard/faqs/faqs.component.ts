@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { tap } from 'rxjs';
-
 import { HttpService } from 'src/app/shared/services/http.service';
 
 @Component({
@@ -92,6 +91,8 @@ export class FaqsComponent {
       });
   }
 
+
+
   async getFaqs() {
     try {
       const res: any = await this.http.get('get-faq', true).toPromise();
@@ -101,7 +102,6 @@ export class FaqsComponent {
       console.error('Error fetching users:', error);
     }
   }
-
 
  async stateItem(event: any, data: any) {
   this.selectedFaq = this.faqs?.find((e: any) => e?.id == event.id);

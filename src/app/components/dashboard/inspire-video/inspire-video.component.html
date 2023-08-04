@@ -8,21 +8,28 @@
   <div class="row">
     <div class="col-sm-12 col-xl-4" *ngFor="let item of videos">
       <div class="card">
-        <div (click)="open(addModal, 'edit')" style="background: url('{{ item?.thumbnail }}');" class="card-header b-l-primary no-repeat ">
-          <h5>{{ item?.caption }}</h5>
-          <i class="fas fa-trash delete-icon" (click)="stateItem(item)"></i>
-        </div>
-        <div class="card-body d-flex justify-content-center flex-column align-items-center">
-          <p>{{ item?.description }}</p>
-          <h4>{{ item?.price }}</h4>
-          <button (click)="selectedVideo = item; open(addModal, 'edit')" class="btn btn-primary mt-3">Add</button>
+        <h5 class="card-title">{{ item?.caption }}</h5>
+        <i class="fas fa-trash delete-icon" (click)="stateItem(item, $event)"></i>
+        <div class="card-body">
+          <div class="video-container">
+            <video poster="{{ item?.thumbnail }}" controls>
+              <source [src]="item?.inspire_video" type="video/mp4" />
+            </video>
+          </div>
+          <p class="card-text"  [innerHTML]="item?.description"></p>
+          <button
+            class="actionbtn btn btn-primary"
+            placement="top"
+            (click)="selectedVideo = item; open(addModal, 'edit')"
+          >
+            <i class="fa fa-edit mlicon"></i>
+          </button>
         </div>
       </div>
-      
     </div>
   </div>
 </div>
-
+ 
 <ng-container>
     <ng-template #addModal let-modal>
       <div class="modal-body checkoutModal completed">
@@ -32,84 +39,77 @@
           aria-label="Close"
           (click)="proceed()"
         ></button>
-        <h5 style="color: aliceblue;" class="modal-title">{{state ? 'Edit Video' : 'Add Video'}}</h5>
+        <h5 style="color: aliceblue;" class="modal-caption">{{state ? 'Edit Video' : 'Add Video'}}</h5>
         <form [formGroup]="videoForm" class="form">
-            <div class="row mt-4">
-              <div class="col-lg-12 mt-3">
-                <label for="" class="text-light mb-3">Title</label>
-                <textarea
-                
-                  formControlName="title"
-                  type="text"
-                  placeholder="Title"
-                  class="text-dark w-100"
-                ></textarea>
-                <div
-                  *ngIf="
-                    videoForm.controls.title.invalid &&
-                    (videoForm.controls.title.dirty ||
-                      videoForm.controls.title.touched)
-                  "
-                >
-                  <small class="text-danger">Title is required</small>
-                </div>
-              </div>
-
-              <div class="col-lg-12 mt-3">
-                <label for="" class="text-light mb-3">Price</label>
-                <textarea
-                
-                  formControlName="price"
-                  type="text"
-                  placeholder="Price"
-                  class="text-dark w-100"
-                ></textarea>
-                <div
-                  *ngIf="
-                    videoForm.controls.price.invalid &&
-                    (videoForm.controls.price.dirty ||
-                      videoForm.controls.price.touched)
-                  "
-                >
-                  <small class="text-danger">Price is required</small>
-                </div>
-              </div>
-
-              <div class="col-lg-12 mt-3">
-                <label for="" class="text-light mb-3">Type</label>
-                <textarea
-                
-                  formControlName="type"
-                  type="text"
-                  placeholder="type"
-                  class="text-dark w-100"
-                ></textarea>
-                <div
-                  *ngIf="
-                    videoForm.controls.type.invalid &&
-                    (videoForm.controls.type.dirty ||
-                      videoForm.controls.type.touched)
-                  "
-                >
-                  <small class="text-danger">Type is required</small>
-                </div>
-              </div>
-
-              <div class="col-lg-12 mt-3">
-                <label for="" class="text-light mb-3">Description</label>
-                <ckeditor [editor]="Editor" formControlName="description"></ckeditor>
-                <div
-                  *ngIf="
-                    videoForm.controls.description.invalid &&
-                    (videoForm.controls.description.dirty ||
-                      videoForm.controls.description.touched)
-                  "
-                >
-                  <small class="text-danger">Description is required</small>
-                </div>
+          <div class="row mt-4">
+            <div class="col-lg-12 mt-3">
+              <label for="" class="text-light mb-3">Caption</label>
+              <textarea
+                formControlName="caption"
+                type="text"
+                placeholder="Caption"
+                class="text-dark w-100"
+              ></textarea>
+              <div
+                *ngIf="videoForm.controls.caption.invalid && (videoForm.controls.caption.dirty || videoForm.controls.caption.touched)"
+              >
+                <small class="text-danger">Caption is required</small>
               </div>
             </div>
-          </form>
+        
+            <div class="col-lg-12 mt-3">
+              <label for="" class="text-light mb-3">Thumbnail</label>
+              <input
+                type="file"
+                (change)="onThumbnailSelected($event)"
+                class="text-dark w-100"
+              />
+              <div
+                *ngIf="videoForm.controls.thumbnail.invalid && (videoForm.controls.thumbnail.dirty || videoForm.controls.thumbnail.touched)"
+              >
+                <small class="text-danger">Thumbnail is required</small>
+              </div>
+              <img
+                *ngIf="currentThumbnail || videoForm.get('thumbnail').value"
+                [src]="currentThumbnail ? currentThumbnail : videoForm.get('thumbnail').value"
+                alt="Thumbnail"
+                width="200"
+                height="150"
+              />
+            </div>
+      
+            <div class="col-lg-12 mt-3">  
+              <label for="" class="text-light mb-3">Inspire Video</label>
+              <input
+                type="file"
+                (change)="onInspireVideoSelected($event)"
+                class="text-dark w-100"
+              />
+              <div
+                *ngIf="videoForm.controls.inspire_video.invalid && (videoForm.controls.inspire_video.dirty || videoForm.controls.inspire_video.touched)"
+              >
+                <small class="text-danger">Inspire Video is required</small>
+              </div>
+              <video *ngIf="currentInspireVideo || videoForm.get('inspire_video').value" width="200" height="150" controls>
+                <source
+                  [src]="currentInspireVideo ? currentInspireVideo : videoForm.get('inspire_video').value"
+                  type="video/mp4"
+                />
+              </video>
+            </div>
+        
+            <div class="col-lg-12 mt-3">
+              <label for="" class="text-light mb-3">Description</label>
+              <ckeditor [editor]="Editor" formControlName="description"></ckeditor>
+              <div
+                *ngIf="videoForm.controls.description.invalid && (videoForm.controls.description.dirty || videoForm.controls.description.touched)"
+              >
+                <small class="text-danger">Description is required</small>
+              </div>
+            </div>
+          </div>
+        </form>
+        
       </div>
       <div class="modal-footer d-flex justify-content-start">
         <button

@@ -67,4 +67,27 @@ export class HelperService {
       };
     });
   }
+
+  videoUploadHttp(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const formData = new FormData();
+      formData.append('inspire_video', file);
+  
+      // Remove the formData and use the video file directly in the request body
+      this.http.post('upload', file, true).subscribe(
+        (response: any) => {
+          console.log('API response:', response);
+          resolve(response.data.video_url);
+        },
+        (error) => {
+          console.error('API error:', error);
+          reject(error);
+        }
+      );
+    });
+  }
+  
+  
+  
+
 }
